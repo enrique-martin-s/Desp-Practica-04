@@ -14,7 +14,7 @@ apt install apache2 -y
 
 # Instalamos el sistema gesto de bases de datos mysql
 apt install mysql-server -y
-
+ 
 # Instalamos php y los modulos necesarios
 apt install php libapache2-mod-php php-mysql -y
 
