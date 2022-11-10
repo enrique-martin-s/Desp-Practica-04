@@ -3,6 +3,10 @@
 # para mostrar los comandos que se van ejecutando
 set -x
 
+# Variables de configuración
+STATS_USER=usuario
+STATS_pass=usuario
+
 # Paso 1: instalacion de phpmyadmin
 # descargamos el codigo fuente de phmyadmin
 wget https://files.phpmyadmin.net/phpMyAdmin/5.2.0/phpMyAdmin-5.2.0-all-languages.zip --output-document /tmp/pma.zip
@@ -14,8 +18,7 @@ apt install unzip -y
 unzip /tmp/pma.zip -d /var/www/html
 
 # renombramos el nombre del directorio
-mv /var/www/html/phpMyAdmin-5.2.0-all-languages /var/www/html/phpmyadmin -y
-
+mv /var/www/html/phpMyAdmin-5.2.0-all-languages /var/www/html/phpmyadmin
 # borramos los temporales
 rm -f /tmp/pma.zip
 
@@ -34,3 +37,19 @@ mysql -u root < ../sql/create_user.sql
 mkdir -p /var/www/html/adminer
 # descargamos el codigo fuente
 wget https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1-mysql.php --output-document /var/www/html/adminer/index.php
+
+## Paso 3: instalación de Goaccess
+apt install goaccess
+
+# creamos un directorio para las estadisticas de GoAccess
+mkdir -p /var/www/html/stats
+
+# Ejecutamos goacess en segundo plano para generar informes en tiempo real
+# Nota: es necesario abrir el puerto 7890 en el firewall
+goaccess /var/log/apache2/access.log -o /var/www/html/stats/index.html --log-format=COMBINED --real-time-html --daemonize
+
+# Paso 4: Control de acceso a un directorio con autenticación básica
+mkdir -p /etc/apache2/claves
+
+# Creamos el archivo de contraseñas
+htpasswd -c /etc/apache2/claves/.htpasswd $STATS_USER $STATS_PASS
