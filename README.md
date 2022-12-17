@@ -1,7 +1,7 @@
 # Desp-Practica-04
 
 En esta práctica vamos a realizar la instalación de la pila LAMP en una instancia EC2 de AWS con Ubuntu Server y le añadiremos 
-## Creación de una instancia en AWSr
+## Creación de una instancia en AWS
 Entramos a ``AWS`` con nuestras credenciales y clicamos en ``EC2`` (si no aparece podemos usar el buscador de arriba).
 ### Crear un par de claves
 En el apartado ``Red y seguridad`` clicamos en ``Pares de claves`` y le damos a crear un par de claves. Le daremos un nombre y en nuestro caso seleccionaremos ``RSA`` y ``.pem``. Le daremos a crear y automaticamente nos pedirá guardar la clave privada en nuestro almacenamiento, así que la pondremos en un sitio seguro (y al alcance pues la usaremos más tarde).
