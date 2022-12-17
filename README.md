@@ -1,6 +1,6 @@
 # Desp-Practica-04
 
-En esta práctica vamos a realizar la instalación de la pila LAMP en una instancia EC2 de AWS con Ubuntu Server y le añadiremos 
+En esta práctica vamos a realizar la instalación de la pila LAMP en una instancia EC2 de AWS con Ubuntu Server y le añadiremos phpmyadmin, goaccess y adminer.
 ## Creación de una instancia en AWS
 Entramos a ``AWS`` con nuestras credenciales y clicamos en ``EC2`` (si no aparece podemos usar el buscador de arriba).
 ### Crear un par de claves
