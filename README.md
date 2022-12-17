@@ -66,3 +66,19 @@ Despúes ejecutaremos el segundo script con ``sudo ./install_tools.sh``. Una vez
 7. ``unzip /tmp/pma.zip -d /var/www/html`` extraerá el archivo descargado a nuestro directorio raiz del web server.
 8. ``rm -rf /var/www/html/phpMyAdmin-5.2.0-all-languages`` borrará la instalación anterior de phpmyadmin
 9. ``mv /var/www/html/phpMyAdmin-5.2.0-all-languages /var/www/html/phpmyadmin`` renombrará la carpeta de los archivos extraidos.
+10. ``cp /var/www/html/phpmyadmin/config.sample.inc.php /var/www/html/phpmyadmin/config.inc.php`` creamos el archivo de configuracion de phpmyadmin
+11. ``sed -i "s/\['blowfish_secret'\] = '';/\['blowfish_secret'\] = '$BLOWFISH_SECRET';/" /var/www/html/phpmyadmin/config.inc.php`` lo editamos para incluir nuestra clave hexadecimal generada en el paso 3.
+12. ``rm -f /tmp/pma.zip`` borramos el archivo compromido.
+13. ``mysql -u root <<< "DROP DATABASE IF EXISTS phpmyadmin;"`` borra la base de datos de phpmyadmin anterior si existe
+14. ``mysql -u root < /var/www/html/phpmyadmin/sql/create_tables.sql`` importa la base nueva
+15. ``mysql -u root < ../sql/create_user.sql`` creamos el usuario. Podemos modificar los datos de este usuario en el archivo sql tambien adjunto con este repositorio.
+16. ``apt install php-mbstring php-zip php-gd php-json php-curl -y`` instala los módulos de php necesarios para phpmyadmin.
+17. ``systemctl restart apache2`` reiniciamos el servicio Apache
+18. ``chown -R www-data:www-data /var/www/html/`` cambia el propietario y el grupo del directorio del servidor web
+19. ``mkdir -p /var/www/html/adminer`` crea un directorio para adminer
+20. ``wget https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1-mysql.php --output-document /var/www/html/adminer/index.php`` descarga el codigo fuente de adminer y lo mete en el directorio creado en el paso anterior renombrándolo a index.php.
+21. ``apt install goaccess`` instala goaccess
+22. ``mkdir -p /var/www/html/stats`` crea un directorio para las estadísticas de goaccess
+23. ``goaccess /var/log/apache2/access.log -o /var/www/html/stats/index.html --log-format=COMBINED --real-time-html --daemonize`` indicamos que las estadísticas generen un archivo de salida index.html y que cambie en tiempo real. Además indicamos que este proceso debe ejecutarse en segundo plano. Para que esto funcione es necesario abrir el puerto 7890
+24. ``mkdir -p /etc/apache2/claves`` creamos un directorio en apache con autenticación básica
+25. ``htpasswd -cb /etc/apache2/claves/.htpasswd $STATS_USER $STATS_PASS`` creamos el archivo de contraseñas. Ahora nuestras estadísticas estaran protegidas por contraseña gracias a .htaccess.
